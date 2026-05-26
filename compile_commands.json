@@ -1,0 +1,22 @@
+[
+  {
+    "file": "sdl.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/include/SDL2",
+      "-D_GNU_SOURCE=1",
+      "-D_REENTRANT",
+      "-ggdb3",
+      "-O0",
+      "--std=c99",
+      "-Wall",
+      "-Iinc",
+      "-c",
+      "sdl.c",
+      "-o",
+      "build/sdl.o"
+    ],
+    "directory": "/home/noctyris/Documents/Dev/3dEngine",
+    "output": "build/sdl.o"
+  }
+]
