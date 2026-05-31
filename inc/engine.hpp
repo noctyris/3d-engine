@@ -14,6 +14,7 @@ class Camera {
     Mat projection_matrix, view_matrix;
 
     Camera(Vec4 pos, Vec4 targ, float field_of_view, std::pair<float, float> z, std::pair<int, int> screen_size);
+    void gen_projection_matrix();
 };
 
 #endif
