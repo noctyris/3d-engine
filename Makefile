@@ -1,30 +1,29 @@
-BUILDDIR := build
-INCDIR := inc
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -ggdb3 -Iinc $(shell pkg-config --cflags sdl3)
+LDFLAGS = $(shell pkg-config --libs sdl3) -lm
 
-CC = gcc
-CFLAGS = `pkg-config --cflags sdl3` -ggdb3 -O0 --std=c99 -Wall -I$(INCDIR)
-LIBS = `pkg-config --libs sdl3` -lm
+SRC_DIR = ./
+OBJ_DIR = build
+BIN = launch
 
-HDRS := $(wildcard inc/*.h)
-SRCS := $(wildcard *.c)
-OBJS := $(SRCS:%.c=$(BUILDDIR)/%.o)
-EXEC := launch
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-all: $(EXEC)
+all: $(BIN)
 
-$(BUILDDIR):
-	mkdir -p $@
+$(BIN): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
-$(BUILDDIR)/%.o: %.c | $(BUILDDIR)
-	$(CC) $(CFLAGS) $(LIBS) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(EXEC): $(OBJS) | 
-	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LIBS)
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
-run: $(EXEC)
-	./$(EXEC)
+run: all
+	./$(BIN)
 
 clean:
-	rm -rf $(BUILDDIR) $(EXEC)
+	rm -rf $(OBJ_DIR) $(BIN)
 
 .PHONY: all clean run

@@ -1,0 +1,41 @@
+#ifndef SDLAPP_HPP
+#define SDLAPP_HPP
+
+#include <SDL3/SDL.h>
+#include <string>
+
+struct Color {
+    Uint8 r, g, b, a;
+
+    Color(Uint8 r = 0, Uint8 g = 0, Uint8 b = 0, Uint8 a = 255)
+        : r(r), g(g), b(b), a(a) {}
+};
+
+struct Vec2 {
+  Uint16 x, y;
+};
+
+class SDLApp {
+public:
+    SDLApp(const std::string& title, int width, int height);
+    ~SDLApp();
+
+    // Prevent copying because of the raw pointers (RAII)
+    SDLApp(const SDLApp&) = delete;
+    SDLApp& operator=(const SDLApp&) = delete;
+
+    bool isRunning() const { return m_running; }
+    void pollEvents();
+    void clear(const Color& color);
+    void drawLine(Vec2 pos1, Vec2 pos2, const Color& color);
+    void present();
+
+private:
+    SDL_Window* m_window = nullptr;
+    SDL_Renderer* m_renderer = nullptr;
+    bool m_running = true;
+
+    void setDrawColor(const Color& color);
+};
+
+#endif

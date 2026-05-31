@@ -1,22 +1,19 @@
 [
   {
-    "file": "sdl.c",
+    "file": "sdlapp.cpp",
     "arguments": [
-      "/usr/bin/gcc",
-      "-I/usr/include/SDL2",
-      "-D_GNU_SOURCE=1",
-      "-D_REENTRANT",
-      "-ggdb3",
-      "-O0",
-      "--std=c99",
+      "/usr/bin/g++",
+      "-std=c++17",
       "-Wall",
+      "-Wextra",
+      "-ggdb3",
       "-Iinc",
       "-c",
-      "sdl.c",
+      "sdlapp.cpp",
       "-o",
-      "build/sdl.o"
+      "build/sdlapp.o"
     ],
     "directory": "/home/noctyris/Documents/Dev/3dEngine",
-    "output": "build/sdl.o"
+    "output": "build/sdlapp.o"
   }
 ]
