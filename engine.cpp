@@ -1,4 +1,7 @@
 #include "engine.hpp"
+#include "matrix.hpp"
+
+float radians(float deg) { return deg * M_PI / 180.f; };
 
 Camera::Camera(Vec4 pos, Vec4 targ, float field_of_view, std::pair<float, float> z, std::pair<int, int> screen_size)
   : position(pos), target(targ), fov(field_of_view), zn(z.first), zf(z.second), width(screen_size.first), height(screen_size.second), aspect_ratio((float)screen_size.second / (float)screen_size.first) {};
@@ -11,4 +14,15 @@ void Camera::gen_projection_matrix() {
   projection_matrix(2,3) = -zf*zn/(zf-zn);
   projection_matrix(3,2) = 1;
   projection_matrix(3,3) = 0;
+}
+
+void Camera::gen_view_matrix() {
+  Vec4 f = (target - position).norm();
+  Vec4 r = cross(Vec4(0, 1, 0, 1), f).norm();
+  Vec4 u = cross(f, r);
+  view_matrix = Mat({r.x,  r.y,  r.z,  -dot(r, position),
+                     u.x,  u.y,  u.z,  -dot(u, position),
+                     f.x,  f.y,  f.z,  -dot(f, position),
+                     0,    0,    0,    1}
+  );
 }

@@ -11,8 +11,10 @@ struct Color {
         : r(r), g(g), b(b), a(a) {}
 };
 
-struct Vec2 {
-  Uint16 x, y;
+class Vec2 {
+  public:
+    int x, y;
+    Vec2(int x, int y) : x(x), y(y) {};
 };
 
 class SDLApp {
