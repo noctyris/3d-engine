@@ -1,6 +1,7 @@
 #ifndef SDLAPP_HPP
 #define SDLAPP_HPP
 
+#include <SDL3/SDL_video.h>
 #define FPS 60
 
 #include <SDL3/SDL.h>
@@ -16,7 +17,13 @@ struct Color {
 class Vec2 {
   public:
   int x, y;
-  Vec2(int x, int y) : x(x), y(y) {};
+  Vec2(int x = 0, int y = 0) : x(x), y(y) {};
+};
+
+class Vec2f {
+  public:
+  float x, y;
+  Vec2f(float x = 0, float y = 0) : x(x), y(y) {};
 };
 
 class SDLApp {
@@ -33,6 +40,7 @@ public:
   void clear(const Color& color);
   void drawLine(Vec2 pos1, Vec2 pos2, const Color& color);
   void present();
+  SDL_Window* get_window() const { return m_window; };
 
 private:
   SDL_Window* m_window = nullptr;

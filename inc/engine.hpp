@@ -16,6 +16,8 @@ class Camera {
     int width, height;
     float aspect_ratio;
     Mat projection_matrix, view_matrix;
+    float yaw = -90.0f, pitch = 0.0f;
+    float sensivity = 0.1f;
 
     Camera(Vec4 pos, Vec4 targ, float field_of_view, std::pair<float, float> z, std::pair<int, int> screen_size);
     void gen_projection_matrix();
@@ -23,6 +25,7 @@ class Camera {
     void move_forward(float speed);
     void move_sideways(float speed);
     void move_altitude(float speed);
+    void rotate(float dx, float dy);
   private:
     Vec4 get_direction();
     void update_position(Vec4 dir, float speed);

@@ -50,3 +50,19 @@ void Camera::move_altitude(float speed) {
   Vec4 dir(0, 1, 0, 0);
   update_position(dir, speed);
 }
+
+void Camera::rotate(float dx, float dy) {
+  yaw += dx * sensivity;
+  pitch += dy * sensivity;
+
+  if (pitch > 89.9f) pitch = 89.9f;
+  if (pitch < -89.9f) pitch = -89.9f;
+
+  Vec4 front;
+  front.x = cos(yaw * M_PI / 180.0f) * cos(pitch * M_PI / 180.0f);
+  front.y = sin(pitch * M_PI / 180.0f);
+  front.z = sin(yaw * M_PI / 180.0f) * cos(pitch * M_PI / 180.0f);
+  front.w = 0;
+
+  target = position + front.norm();
+}
