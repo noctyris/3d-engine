@@ -1,6 +1,7 @@
 #include "engine.hpp"
 #include "matrix.hpp"
 #include "sdlapp.hpp"
+#include <SDL3/SDL_scancode.h>
 #include <vector>
 
 const int SCREEN_WIDTH = 800;
@@ -26,10 +27,21 @@ int main() {
   camera.gen_projection_matrix();
   camera.gen_view_matrix();
 
+  float speed = 0.05f;
+
   Mat comp_matrix;
 
   while (sdl.isRunning()) {
     sdl.pollEvents();
+    int numkeys;
+    const bool* state = SDL_GetKeyboardState(&numkeys);
+
+    if (state[SDL_SCANCODE_W]) camera.move_forward(speed);
+    if (state[SDL_SCANCODE_S]) camera.move_forward(-speed);
+    if (state[SDL_SCANCODE_A]) camera.move_sideways(speed);
+    if (state[SDL_SCANCODE_D]) camera.move_sideways(-speed);
+    if (state[SDL_SCANCODE_F]) camera.move_altitude(speed);
+    if (state[SDL_SCANCODE_R]) camera.move_altitude(-speed);
 
     sdl.clear(Color(0, 0, 0));
     

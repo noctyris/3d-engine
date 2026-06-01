@@ -26,3 +26,27 @@ void Camera::gen_view_matrix() {
                      0,    0,    0,    1}
   );
 }
+
+Vec4 Camera::get_direction() {
+  return Vec4(target - position).norm();
+}
+
+void Camera::update_position(Vec4 dir, float speed) {
+  position = position + dir * speed;
+  target = target + dir * speed;
+}
+
+void Camera::move_forward(float speed) {
+  Vec4 dir = get_direction();
+  update_position(dir, speed);
+}
+
+void Camera::move_sideways(float speed) {
+  Vec4 dir = cross(Vec4(0, 1, 0, 0), get_direction()).norm();
+  update_position(dir, speed);
+}
+
+void Camera::move_altitude(float speed) {
+  Vec4 dir(0, 1, 0, 0);
+  update_position(dir, speed);
+}
