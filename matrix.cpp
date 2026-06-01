@@ -69,6 +69,14 @@ Vec4 Vec4::operator-(const Vec4 other) {
   return Vec4((*this).x-other.x, (*this).y-other.y, (*this).z-other.z, 1);
 }
 
+Vec4 Vec4::operator*(const float coef) {
+  float values[4];
+  for (int i = 0; i < 4; i++) {
+    values[i] = (*this).v[i] * coef;
+  }
+  return Vec4(values[0], values[1], values[2], values[3]);
+}
+
 Vec2 Vec4::get_screen_position(Mat comp_matrix, std::pair<int, int> screen_size) {
   Vec4 V_screen = comp_matrix * (*this);
   float x = V_screen.x;

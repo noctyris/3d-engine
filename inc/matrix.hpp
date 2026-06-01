@@ -33,6 +33,7 @@ class Vec4 {
     Vec4(float x=0, float y=0, float z=0, float w=1) : x(x), y(y), z(z), w(w) {};
     Vec4 operator+(const Vec4 other);
     Vec4 operator-(const Vec4 other);
+    Vec4 operator*(const float coef);
     Vec2 get_screen_position(Mat comp_matrix, std::pair<int, int> screen_size);
     Vec4 norm();
     void print();
