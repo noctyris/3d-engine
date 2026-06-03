@@ -12,11 +12,28 @@ int main() {
   SDLApp sdl("3D Engine C++", SCREEN_WIDTH, SCREEN_HEIGHT);
   SDL_SetWindowRelativeMouseMode(sdl.get_window(), true);
 
-  Camera camera(Vec4(6, 2, 3, 1), Vec4(0, 0, 0, 1), radians(70.f), {0.1, 1000}, DIMS);
+  Camera camera(Vec4(6, 2, 3), Vec4(0, 0, 0), radians(70.f), {0.1, 1000}, DIMS);
   camera.gen_projection_matrix();
   camera.gen_view_matrix();
 
-  Triangle triangle(Vec4(0, 2, 0, 1), Vec4(2, 1, 0, 1), Vec4(0, 0, 3, 1), Color(255, 0, 0));
+  Vec4 vs[8];
+  for (int i = 0; i < 8; i++) {
+    vs[i] = Vec4(i<4 ? -1 : 1, ((int)(i/2))%2==0 ? -1 : 1, i%2==0 ? -1 : 1);
+  }
+  
+  Triangle faces[12];
+  faces[0]  = Triangle(vs[0], vs[2], vs[4]);
+  faces[1]  = Triangle(vs[0], vs[1], vs[2]);
+  faces[2]  = Triangle(vs[0], vs[4], vs[1]);
+  faces[3]  = Triangle(vs[6], vs[4], vs[2]);
+  faces[4]  = Triangle(vs[6], vs[2], vs[7]);
+  faces[5]  = Triangle(vs[6], vs[7], vs[4]);
+  faces[6]  = Triangle(vs[5], vs[1], vs[4]);
+  faces[7]  = Triangle(vs[5], vs[4], vs[7]);
+  faces[8]  = Triangle(vs[5], vs[7], vs[1]);
+  faces[9]  = Triangle(vs[3], vs[2], vs[1]);
+  faces[10] = Triangle(vs[3], vs[1], vs[7]);
+  faces[11] = Triangle(vs[3], vs[7], vs[2]);
 
   float speed = 0.05f;
 
@@ -42,7 +59,7 @@ int main() {
     camera.gen_view_matrix();
     comp_matrix = camera.projection_matrix * camera.view_matrix; // * M
     
-    sdl.draw_triangle(triangle, comp_matrix);
+    for (int i = 0; i < 12; i++) sdl.draw_triangle(faces[i], comp_matrix);
 
     sdl.present();
   }
