@@ -3,7 +3,6 @@
 #include "sdlapp.hpp"
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_scancode.h>
-#include <vector>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
@@ -13,26 +12,16 @@ int main() {
   SDLApp sdl("3D Engine C++", SCREEN_WIDTH, SCREEN_HEIGHT);
   SDL_SetWindowRelativeMouseMode(sdl.get_window(), true);
 
-  // Vectices 
-  std::vector<Vec4> vectices = {
-    Vec4(-1, -1, -1, 1),
-    Vec4(-1, -1,  1, 1),
-    Vec4(-1,  1, -1, 1),
-    Vec4(-1,  1,  1, 1),
-    Vec4( 1, -1, -1, 1),
-    Vec4( 1, -1,  1, 1),
-    Vec4( 1,  1, -1, 1),
-    Vec4( 1,  1,  1, 1)
-  };
-
   Camera camera(Vec4(6, 2, 3, 1), Vec4(0, 0, 0, 1), radians(70.f), {0.1, 1000}, DIMS);
   camera.gen_projection_matrix();
   camera.gen_view_matrix();
 
+  Triangle triangle(Vec4(0, 2, 0, 1), Vec4(2, 1, 0, 1), Vec4(0, 0, 3, 1), Color(255, 0, 0));
+
   float speed = 0.05f;
 
-  Mat comp_matrix;
   Vec2f mouse;
+  Mat comp_matrix;
 
   while (sdl.isRunning()) {
     sdl.pollEvents();
@@ -53,11 +42,7 @@ int main() {
     camera.gen_view_matrix();
     comp_matrix = camera.projection_matrix * camera.view_matrix; // * M
     
-    for (int i = 0; i < 8; i++) {
-      for (int j = i+1; j < 8; j++) {
-        sdl.drawLine(vectices[i].get_screen_position(comp_matrix, DIMS), vectices[j].get_screen_position(comp_matrix, DIMS), Color(255, 255, 255));
-      }
-    }
+    sdl.draw_triangle(triangle, comp_matrix);
 
     sdl.present();
   }

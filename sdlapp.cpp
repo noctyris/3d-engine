@@ -1,8 +1,11 @@
 #include "sdlapp.hpp"
+#include "engine.hpp"
 #include "logger.hpp"
 #include <SDL3/SDL_timer.h>
 
 SDLApp::SDLApp(const std::string& title, int width, int height) {
+  W = width, H = height;
+  DIMS = {W, H};
   if (!SDL_Init(SDL_INIT_VIDEO)) {
     Logger::error("SDL_Init failed", SDL_GetError());
     m_running = false;
@@ -48,7 +51,7 @@ void SDLApp::clear(const Color& color) {
   SDL_RenderClear(m_renderer);
 }
 
-void SDLApp::drawLine(Vec2 pos1, Vec2 pos2, const Color& color) {
+void SDLApp::draw_line(Vec2 pos1, Vec2 pos2, const Color& color) {
   setDrawColor(color);
   SDL_RenderLine(m_renderer, (float)pos1.x, (float)pos1.y, (float)pos2.x, (float)pos2.y);
 }
@@ -56,4 +59,17 @@ void SDLApp::drawLine(Vec2 pos1, Vec2 pos2, const Color& color) {
 void SDLApp::present() {
   SDL_Delay(1000/FPS);
   SDL_RenderPresent(m_renderer);
+}
+
+void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix) {
+  Vec2 p1 = tri.v1.project(comp_matrix, DIMS);
+  Vec2 p2 = tri.v2.project(comp_matrix, DIMS);
+  Vec2 p3 = tri.v3.project(comp_matrix, DIMS);
+  if (0 <= p1.x && p1.x <= DIMS.first && 0 <= p1.y && p1.y <= DIMS.second &&
+      0 <= p2.x && p2.x <= DIMS.first && 0 <= p2.y && p2.y <= DIMS.second &&
+      0 <= p3.x && p3.x <= DIMS.first && 0 <= p3.y && p3.y <= DIMS.second) {
+    draw_line(p1, p2, tri.color);
+    draw_line(p1, p3, tri.color);
+    draw_line(p2, p3, tri.color);
+  }
 }

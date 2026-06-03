@@ -6,19 +6,9 @@
 
 #include <SDL3/SDL.h>
 #include <string>
-
-struct Color {
-  Uint8 r, g, b, a;
-
-  Color(Uint8 r = 0, Uint8 g = 0, Uint8 b = 0, Uint8 a = 255)
-    : r(r), g(g), b(b), a(a) {}
-};
-
-class Vec2 {
-  public:
-  int x, y;
-  Vec2(int x = 0, int y = 0) : x(x), y(y) {};
-};
+#include "types.hpp"
+#include "engine.hpp"
+#include "matrix.hpp"
 
 class Vec2f {
   public:
@@ -38,11 +28,14 @@ public:
   bool isRunning() const { return m_running; }
   void pollEvents();
   void clear(const Color& color);
-  void drawLine(Vec2 pos1, Vec2 pos2, const Color& color);
+  void draw_line(Vec2 pos1, Vec2 pos2, const Color& color);
   void present();
   SDL_Window* get_window() const { return m_window; };
+  void draw_triangle(Triangle tri, Mat comp_matrix);
 
 private:
+  int W, H;
+  std::pair<int, int> DIMS;
   SDL_Window* m_window = nullptr;
   SDL_Renderer* m_renderer = nullptr;
   bool m_running = true;

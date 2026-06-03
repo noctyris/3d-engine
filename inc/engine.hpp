@@ -1,9 +1,9 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 
-#include "sdlapp.hpp"
 #define _USE_MATH_DEFINE
 
+#include "types.hpp"
 #include "matrix.hpp"
 #include <utility>
 #include <math.h>
@@ -29,6 +29,14 @@ class Camera {
   private:
     Vec4 get_direction();
     void update_position(Vec4 dir, float speed);
+};
+
+class Triangle {
+  public:
+    Vec4 v1, v2, v3;
+    Color color;
+
+    Triangle(Vec4 v1 = Vec4(0, 0, 0, 1), Vec4 v2 = Vec4(0, 0, 0, 1), Vec4 v3 = Vec4(0, 0, 0, 1), Color c = Color(0, 0, 0)) : v1(v1), v2(v2), v3(v3), color(c) {};
 };
 
 float radians(float deg);

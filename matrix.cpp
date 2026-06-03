@@ -1,5 +1,4 @@
 #include "matrix.hpp"
-#include "sdlapp.hpp"
 
 Mat::Mat(std::initializer_list<float> list) {
   int i = 0;
@@ -77,7 +76,7 @@ Vec4 Vec4::operator*(const float coef) {
   return Vec4(values[0], values[1], values[2], values[3]);
 }
 
-Vec2 Vec4::get_screen_position(Mat comp_matrix, std::pair<int, int> screen_size) {
+Vec2 Vec4::project(Mat comp_matrix, std::pair<int, int> screen_size) {
   Vec4 V_screen = comp_matrix * (*this);
   float x = V_screen.x;
   float y = V_screen.y;

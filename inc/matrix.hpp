@@ -4,8 +4,8 @@
 #define DIM 4
 
 #include <initializer_list>
+#include "types.hpp"
 #include <iostream>
-#include "sdlapp.hpp"
 #include <cmath>
 
 class Vec4;
@@ -34,7 +34,7 @@ class Vec4 {
     Vec4 operator+(const Vec4 other);
     Vec4 operator-(const Vec4 other);
     Vec4 operator*(const float coef);
-    Vec2 get_screen_position(Mat comp_matrix, std::pair<int, int> screen_size);
+    Vec2 project(Mat comp_matrix, std::pair<int, int> screen_size);
     Vec4 norm();
     void print();
 };
