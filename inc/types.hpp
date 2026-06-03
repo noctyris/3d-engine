@@ -10,8 +10,8 @@ struct Color {
 
 class Vec2 {
   public:
-    float x, y;
-    Vec2(float x = 0, float y = 0) : x(x), y(y) {};
+    float x, y, w;
+    Vec2(float x = 0, float y = 0, float w = 0) : x(x), y(y), w(w) {};
 };
 
 #endif

@@ -81,7 +81,7 @@ Vec2 Vec4::project(Mat comp_matrix, std::pair<int, int> screen_size) {
   float x = V_screen.x;
   float y = V_screen.y;
   float w = V_screen.w;
-  return Vec2((x/w + 1)/2 * screen_size.first, (1 - y/w)/2 * screen_size.second);
+  return Vec2((x/w + 1)/2 * screen_size.first, (1 - y/w)/2 * screen_size.second, w);
 }
 
 float dot(Vec4 u, Vec4 v) {
