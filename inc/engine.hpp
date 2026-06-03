@@ -36,7 +36,7 @@ class Triangle {
     Vec4 v1, v2, v3;
     Color color;
 
-    Triangle(Vec4 v1 = Vec4(0, 0, 0, 1), Vec4 v2 = Vec4(0, 0, 0, 1), Vec4 v3 = Vec4(0, 0, 0, 1), Color c = Color(0, 0, 0)) : v1(v1), v2(v2), v3(v3), color(c) {};
+    Triangle(Vec4 v1 = Vec4(0, 0, 0, 1), Vec4 v2 = Vec4(0, 0, 0, 1), Vec4 v3 = Vec4(0, 0, 0, 1), Color c = Color(255, 255, 255)) : v1(v1), v2(v2), v3(v3), color(c) {};
 };
 
 float radians(float deg);
