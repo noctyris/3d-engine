@@ -61,13 +61,15 @@ void SDLApp::present() {
   SDL_RenderPresent(m_renderer);
 }
 
-void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix) {
+void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float> z) {
+  float zn = z.first, zf = z.second;
   Vec2 p1 = tri.v1.project(comp_matrix, DIMS);
   Vec2 p2 = tri.v2.project(comp_matrix, DIMS);
   Vec2 p3 = tri.v3.project(comp_matrix, DIMS);
   if (0 <= p1.x && p1.x <= DIMS.first && 0 <= p1.y && p1.y <= DIMS.second &&
       0 <= p2.x && p2.x <= DIMS.first && 0 <= p2.y && p2.y <= DIMS.second &&
-      0 <= p3.x && p3.x <= DIMS.first && 0 <= p3.y && p3.y <= DIMS.second) {
+      0 <= p3.x && p3.x <= DIMS.first && 0 <= p3.y && p3.y <= DIMS.second && 
+      zn <= p1.w && p1.w <= zf && zn <= p2.w && p2.w <= zf && zn <= p3.w && p3.w <= zf) {
     draw_line(p1, p2, tri.color);
     draw_line(p1, p3, tri.color);
     draw_line(p2, p3, tri.color);
