@@ -8,7 +8,7 @@ Camera::Camera(Vec4 pos, Vec4 targ, float field_of_view, std::pair<float, float>
 
 void Camera::gen_projection_matrix() {
   float f = 1/tan(fov/2);
-  projection_matrix(0,0) = aspect_ratio / f;
+  projection_matrix(0,0) = aspect_ratio * f;
   projection_matrix(1,1) = f;
   projection_matrix(2,2) = zf/(zf-zn);
   projection_matrix(2,3) = -zf*zn/(zf-zn);
