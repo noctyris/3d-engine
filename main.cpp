@@ -22,18 +22,18 @@ int main() {
   }
   
   Triangle faces[12];
-  faces[0]  = Triangle(vs[0], vs[2], vs[4]);
-  faces[1]  = Triangle(vs[0], vs[1], vs[2]);
-  faces[2]  = Triangle(vs[0], vs[4], vs[1]);
-  faces[3]  = Triangle(vs[6], vs[4], vs[2]);
-  faces[4]  = Triangle(vs[6], vs[2], vs[7]);
-  faces[5]  = Triangle(vs[6], vs[7], vs[4]);
-  faces[6]  = Triangle(vs[5], vs[1], vs[4]);
-  faces[7]  = Triangle(vs[5], vs[4], vs[7]);
-  faces[8]  = Triangle(vs[5], vs[7], vs[1]);
-  faces[9]  = Triangle(vs[3], vs[2], vs[1]);
-  faces[10] = Triangle(vs[3], vs[1], vs[7]);
-  faces[11] = Triangle(vs[3], vs[7], vs[2]);
+  faces[0]  = Triangle(vs[0], vs[2], vs[4], Color(255, 0, 0));
+  faces[1]  = Triangle(vs[0], vs[1], vs[2], Color(0, 255, 0));
+  faces[2]  = Triangle(vs[0], vs[4], vs[1], Color(0, 0, 255));
+  faces[3]  = Triangle(vs[6], vs[4], vs[2], Color(255, 255, 0));
+  faces[4]  = Triangle(vs[6], vs[2], vs[7], Color(255, 0, 255));
+  faces[5]  = Triangle(vs[6], vs[7], vs[4], Color(0, 255, 255));
+  faces[6]  = Triangle(vs[5], vs[1], vs[4], Color(255, 255, 255));
+  faces[7]  = Triangle(vs[5], vs[4], vs[7], Color(255, 0, 0));
+  faces[8]  = Triangle(vs[5], vs[7], vs[1], Color(0, 255, 0));
+  faces[9]  = Triangle(vs[3], vs[2], vs[1], Color(0, 0, 255));
+  faces[10] = Triangle(vs[3], vs[1], vs[7], Color(255, 255, 0));
+  faces[11] = Triangle(vs[3], vs[7], vs[2], Color(255, 0, 255));
 
   float speed = 0.05f;
 
@@ -59,7 +59,7 @@ int main() {
     camera.gen_view_matrix();
     comp_matrix = camera.projection_matrix * camera.view_matrix; // * M
     
-    for (int i = 0; i < 12; i++) sdl.draw_triangle(faces[i], comp_matrix);
+    for (int i = 0; i < 12; i++) sdl.draw_triangle(faces[i], comp_matrix, {camera.zn, camera.zf});
 
     sdl.present();
   }
