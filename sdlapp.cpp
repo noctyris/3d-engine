@@ -1,7 +1,10 @@
 #include "sdlapp.hpp"
 #include "engine.hpp"
 #include "logger.hpp"
+#include "matrix.hpp"
+#include <SDL3/SDL_render.h>
 #include <SDL3/SDL_timer.h>
+#include <cstddef>
 
 SDLApp::SDLApp(const std::string& title, int width, int height) {
   W = width, H = height;
@@ -61,8 +64,12 @@ void SDLApp::present() {
   SDL_RenderPresent(m_renderer);
 }
 
-void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float> z) {
+void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
   float zn = z.first, zf = z.second;
+  Vec4 N = cross((tri.v2-tri.v1), (tri.v3-tri.v1));
+  Vec4 V_cam = (E-tri.v1).norm();
+  if (dot(N, V_cam) <= 0) return;
+
   Vec2 p1 = tri.v1.project(comp_matrix, DIMS);
   Vec2 p2 = tri.v2.project(comp_matrix, DIMS);
   Vec2 p3 = tri.v3.project(comp_matrix, DIMS);
@@ -70,8 +77,18 @@ void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float
       0 <= p2.x && p2.x <= DIMS.first && 0 <= p2.y && p2.y <= DIMS.second &&
       0 <= p3.x && p3.x <= DIMS.first && 0 <= p3.y && p3.y <= DIMS.second && 
       zn <= p1.w && p1.w <= zf && zn <= p2.w && p2.w <= zf && zn <= p3.w && p3.w <= zf) {
-    draw_line(p1, p2, tri.color);
-    draw_line(p1, p3, tri.color);
-    draw_line(p2, p3, tri.color);
+    SDL_FColor col = {
+      tri.color.r / 255.0f,
+      tri.color.g / 255.0f,
+      tri.color.b / 255.0f,
+      tri.color.a / 255.0f,
+    };
+
+    SDL_Vertex vertices[3] = {
+      { {p1.x, p1.y}, col, {0, 0} },
+      { {p2.x, p2.y}, col, {0, 0} },
+      { {p3.x, p3.y}, col, {0, 0} },
+    };
+    SDL_RenderGeometry(m_renderer, NULL, vertices, 3, NULL, 0);
   }
 }

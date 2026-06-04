@@ -52,8 +52,8 @@ void Camera::move_altitude(float speed) {
 }
 
 void Camera::rotate(float dx, float dy) {
-  yaw += dx * sensivity;
-  pitch += dy * sensivity;
+  yaw   -= dx * sensivity;
+  pitch -= dy * sensivity;
 
   if (pitch > 89.9f) pitch = 89.9f;
   if (pitch < -89.9f) pitch = -89.9f;

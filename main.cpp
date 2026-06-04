@@ -59,7 +59,7 @@ int main() {
     camera.gen_view_matrix();
     comp_matrix = camera.projection_matrix * camera.view_matrix; // * M
     
-    for (int i = 0; i < 12; i++) sdl.draw_triangle(faces[i], comp_matrix, {camera.zn, camera.zf});
+    for (int i = 0; i < 12; i++) sdl.draw_triangle(faces[i], comp_matrix, {camera.zn, camera.zf}, camera.position);
 
     sdl.present();
   }

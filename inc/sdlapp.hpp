@@ -31,7 +31,7 @@ public:
   void draw_line(Vec2 pos1, Vec2 pos2, const Color& color);
   void present();
   SDL_Window* get_window() const { return m_window; };
-  void draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float> z);
+  void draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float> z, Vec4 E);
 
 private:
   int W, H;
