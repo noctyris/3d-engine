@@ -64,31 +64,61 @@ void SDLApp::present() {
   SDL_RenderPresent(m_renderer);
 }
 
-void SDLApp::draw_triangle(Triangle tri, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
-  float zn = z.first, zf = z.second;
+void SDLApp::fill_triangle(Vec4 v1, Vec4 v2, Vec4 v3, Color c) {
+  auto to_screen = [&](Vec4 p) {
+    float inv_w = 1.0f / p.w;
+    return SDL_FPoint{
+      (p.x * inv_w + 1.0f) * 0.5f * W,
+      (1.0f - (p.y * inv_w + 1.0f) * 0.5f) * H
+    };
+  };
+  SDL_FColor col = { c.r / 255.0f, c.g / 255.0f, c.b / 255.0f, c.a / 255.0f };
+  SDL_Vertex v[3] = {
+    { to_screen(v1), col, {0,0} },
+    { to_screen(v2), col, {0,0} },
+    { to_screen(v3), col, {0,0} }
+  };
+  SDL_RenderGeometry(m_renderer, NULL, v, 3, NULL, 0);
+}
+
+void SDLApp::draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
+  float zn = z.first;
+
+  Vec4 cp1 = comp_matrix * tri.v1;
+  Vec4 cp2 = comp_matrix * tri.v2;
+  Vec4 cp3 = comp_matrix * tri.v3;
+
   Vec4 N = cross((tri.v2-tri.v1), (tri.v3-tri.v1));
   Vec4 V_cam = (E-tri.v1).norm();
   if (dot(N, V_cam) <= 0) return;
 
-  Vec2 p1 = tri.v1.project(comp_matrix, DIMS);
-  Vec2 p2 = tri.v2.project(comp_matrix, DIMS);
-  Vec2 p3 = tri.v3.project(comp_matrix, DIMS);
-  if (0 <= p1.x && p1.x <= DIMS.first && 0 <= p1.y && p1.y <= DIMS.second &&
-      0 <= p2.x && p2.x <= DIMS.first && 0 <= p2.y && p2.y <= DIMS.second &&
-      0 <= p3.x && p3.x <= DIMS.first && 0 <= p3.y && p3.y <= DIMS.second && 
-      zn <= p1.w && p1.w <= zf && zn <= p2.w && p2.w <= zf && zn <= p3.w && p3.w <= zf) {
-    SDL_FColor col = {
-      tri.color.r / 255.0f,
-      tri.color.g / 255.0f,
-      tri.color.b / 255.0f,
-      tri.color.a / 255.0f,
-    };
+  Vec4* inside[3];
+  Vec4* outside[3];
+  int n_inside = 0, n_ouside = 0;
 
-    SDL_Vertex vertices[3] = {
-      { {p1.x, p1.y}, col, {0, 0} },
-      { {p2.x, p2.y}, col, {0, 0} },
-      { {p3.x, p3.y}, col, {0, 0} },
-    };
-    SDL_RenderGeometry(m_renderer, NULL, vertices, 3, NULL, 0);
-  }
+  if (cp1.w >= zn) inside[n_inside++] = &cp1; else outside[n_ouside++] = &cp1;
+  if (cp2.w >= zn) inside[n_inside++] = &cp2; else outside[n_ouside++] = &cp2;
+  if (cp3.w >= zn) inside[n_inside++] = &cp3; else outside[n_ouside++] = &cp3;
+
+  switch (n_inside) {
+    case 3: {
+      fill_triangle(*inside[0], *inside[1], *inside[2], tri.color);
+      break;
+    }
+    case 2: {
+      Vec4 v1 = *inside[0], v2 = *inside[1];
+      Vec4 v3 = intersect(v1, *outside[0], zn);
+      Vec4 v4 = intersect(v2, *outside[0], zn);
+      fill_triangle(v1, v2, v3, tri.color);
+      fill_triangle(v2, v3, v4, tri.color);
+      break;
+    }
+    case 1: {
+      Vec4 v1 = *inside[0];
+      Vec4 v2 = intersect(v1, *outside[0], zn);
+      Vec4 v3 = intersect(v1, *outside[1], zn);
+      fill_triangle(v1, v2, v3, tri.color);
+      break;
+    }
+  };
 }

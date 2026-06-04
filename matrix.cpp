@@ -50,6 +50,11 @@ void Vec4::print() {
   std::cout << "(" << (*this).x << " " << (*this).y << " " << (*this).z << " " << (*this).w << ")\n";
 }
 
+Vec4 intersect(Vec4 inside, Vec4 outside, float zn) {
+    float t = (zn - inside.w) / (outside.w - inside.w);
+    return inside + (outside - inside) * t;
+}
+
 Vec4 Vec4::norm() {
   Vec4 curr = (*this);
   Vec4 vec = Vec4(0, 0, 0, (*this).w);

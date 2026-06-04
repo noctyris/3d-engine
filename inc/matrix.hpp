@@ -39,6 +39,7 @@ class Vec4 {
     void print();
 };
 
+Vec4 intersect(Vec4 inside, Vec4 outside, float zn);
 float dot(Vec4 u, Vec4 v);
 Vec4 cross(Vec4 u, Vec4 v);
 
