@@ -1,6 +1,7 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 
+#include <vector>
 #define _USE_MATH_DEFINE
 
 #include "types.hpp"
@@ -37,6 +38,12 @@ class Triangle {
     Color color;
 
     Triangle(Vec4 v1 = Vec4(0, 0, 0, 1), Vec4 v2 = Vec4(0, 0, 0, 1), Vec4 v3 = Vec4(0, 0, 0, 1), Color c = Color(255, 255, 255)) : v1(v1), v2(v2), v3(v3), color(c) {};
+};
+
+class Mesh {
+  public:
+    std::vector<Vec4> vertices;
+    std::vector<int> indexes;
 };
 
 float radians(float deg);

@@ -16,24 +16,12 @@ int main() {
   camera.gen_projection_matrix();
   camera.gen_view_matrix();
 
-  Vec4 vs[8];
-  for (int i = 0; i < 8; i++) {
-    vs[i] = Vec4(i<4 ? -1 : 1, ((int)(i/2))%2==0 ? -1 : 1, i%2==0 ? -1 : 1);
+  int indexes[36] = { 0,2,4, 0,1,2, 0,4,1, 6,4,2, 6,2,7, 6,7,4, 5,1,4, 5,4,7, 5,7,1, 3,2,1, 3,1,7, 3,7,2 };
+  Mesh mesh;
+  for (int i = 0; i < 36; i++) {
+    if (i < 8) mesh.vertices.push_back(Vec4(i<4 ? -1 : 1, ((int)(i/2))%2==0 ? -1 : 1, i%2==0 ? -1 : 1));
+    mesh.indexes.push_back(indexes[i]);
   }
-  
-  Triangle faces[12];
-  faces[0]  = Triangle(vs[0], vs[2], vs[4], Color(255, 0, 0));
-  faces[1]  = Triangle(vs[0], vs[1], vs[2], Color(255, 0, 0));
-  faces[2]  = Triangle(vs[0], vs[4], vs[1], Color(255, 0, 0));
-  faces[3]  = Triangle(vs[6], vs[4], vs[2], Color(0, 255, 0));
-  faces[4]  = Triangle(vs[6], vs[2], vs[7], Color(0, 255, 0));
-  faces[5]  = Triangle(vs[6], vs[7], vs[4], Color(0, 255, 0));
-  faces[6]  = Triangle(vs[5], vs[1], vs[4], Color(0, 0, 255));
-  faces[7]  = Triangle(vs[5], vs[4], vs[7], Color(0, 0, 255));
-  faces[8]  = Triangle(vs[5], vs[7], vs[1], Color(0, 0, 255));
-  faces[9]  = Triangle(vs[3], vs[2], vs[1], Color(255, 255, 0));
-  faces[10] = Triangle(vs[3], vs[1], vs[7], Color(255, 255, 0));
-  faces[11] = Triangle(vs[3], vs[7], vs[2], Color(255, 255, 0));
 
   float speed = 0.05f;
 
@@ -59,7 +47,8 @@ int main() {
     camera.gen_view_matrix();
     comp_matrix = camera.projection_matrix * camera.view_matrix; // * M
     
-    for (int i = 0; i < 12; i++) sdl.draw_face(faces[i], comp_matrix, {camera.zn, camera.zf}, camera.position);
+    //for (int i = 0; i < 12; i++) sdl.draw_face(faces[i], comp_matrix, {camera.zn, camera.zf}, camera.position);
+    sdl.draw_mesh(mesh, comp_matrix, {camera.zn, camera.zf}, camera.position);
 
     sdl.present();
   }

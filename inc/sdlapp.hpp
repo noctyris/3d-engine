@@ -29,10 +29,11 @@ public:
   void pollEvents();
   void clear(const Color& color);
   void draw_line(Vec2 pos1, Vec2 pos2, const Color& color);
+  void fill_triangle(Vec4 v1, Vec4 v2, Vec4 v3, Color c);
   void present();
   SDL_Window* get_window() const { return m_window; };
   void draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z, Vec4 E);
-  void fill_triangle(Vec4 v1, Vec4 v2, Vec4 v3, Color c);
+  void draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E);
 
 private:
   int W, H;
