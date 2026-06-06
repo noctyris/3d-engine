@@ -124,13 +124,13 @@ void SDLApp::draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z,
 }
 
 void SDLApp::draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
-  // comp_matrix = M * comp_matrix;
+  comp_matrix = mesh.gen_model_matrix() * comp_matrix;
   
   for (size_t i = 0; i < mesh.indexes.size(); i+=3) {
     Vec4 v1 = mesh.vertices[mesh.indexes[i]];
     Vec4 v2 = mesh.vertices[mesh.indexes[i+1]];
     Vec4 v3 = mesh.vertices[mesh.indexes[i+2]];
-    Triangle tri(v1, v2, v3);
+    Triangle tri(v1, v2, v3, mesh.color);
     draw_face(tri, comp_matrix, z, E);
   }
 }

@@ -44,6 +44,13 @@ class Mesh {
   public:
     std::vector<Vec4> vertices;
     std::vector<int> indexes;
+    Color color;
+
+    Vec4 position;
+    Vec4 rotation; // Euler's angles
+    Vec4 scale;
+
+    Mat gen_model_matrix();
 };
 
 float radians(float deg);

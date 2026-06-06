@@ -66,3 +66,13 @@ void Camera::rotate(float dx, float dy) {
 
   target = position + front.norm();
 }
+
+Mat Mesh::gen_model_matrix() {
+  float Tx = position.x,  Ty = position.y,  Tz = position.z;
+  float Rx = rotation.x,  Ry = rotation.y,  Rz = rotation.z;
+  float Sx = scale.x,     Sy = scale.y,     Sz = scale.z;
+  Mat T({1,0,0,Tx, 0,1,0,Ty, 0,0,1,Tz, 0,0,0,1});
+  Mat R = Mat({cos(Ry),0,sin(Ry),0, 0,1,0,0, -sin(Ry),0,cos(Ry),0, 0,0,0,1}) * Mat({1,0,0,0, 0,cos(Rx),-sin(Rx),0, 0,sin(Rx),cos(Rx),0, 0,0,0,1}) * Mat({cos(Rz),-sin(Rz),0,0, sin(Rz),cos(Rz),0,0, 0,0,1,0, 0,0,0,1});
+  Mat S({Sx,0,0,0, 0,Sy,0,0, 0,0,Sz,0, 0,0,0,1});
+  return T*R*S;
+}

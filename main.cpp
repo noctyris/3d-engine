@@ -22,6 +22,9 @@ int main() {
     if (i < 8) mesh.vertices.push_back(Vec4(i<4 ? -1 : 1, ((int)(i/2))%2==0 ? -1 : 1, i%2==0 ? -1 : 1));
     mesh.indexes.push_back(indexes[i]);
   }
+  mesh.color = Color(255, 0, 0);
+  mesh.position = mesh.rotation = Vec4(0, 0, 0);
+  mesh.scale = Vec4(1, 1, 1);
 
   float speed = 0.05f;
 
