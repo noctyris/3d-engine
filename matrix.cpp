@@ -41,6 +41,7 @@ Vec4 Mat4::operator*(const Vec4& v) {
 }
 
 void Mat4::print() {
+  std::cout << std::fixed << std::setprecision(10);
   for (int r = 0; r < 4; r++) {
     for (int c = 0; c < 4; c++) {
       std::cout << (*this)(r, c) << "\t";
