@@ -119,9 +119,10 @@ void SDLApp::draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z)
   };
 }
 
-void SDLApp::draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
+void SDLApp::draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E, DirectionalLight sun) {
   Mat model_matrix = mesh.gen_model_matrix();
   Mat mvp = comp_matrix * model_matrix;
+  Vec4 L = (sun.direction * -1.0f).norm();
 
   for (size_t i = 0; i < mesh.indexes.size(); i+=3) {
     Vec4 v1 = mesh.vertices[mesh.indexes[i]];
@@ -136,7 +137,18 @@ void SDLApp::draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Ve
     Vec4 V_cam = (E-w1).norm();
     if (dot(N, V_cam) <= 0) continue;
 
-    Triangle tri(v1, v2, v3, mesh.color);
+    float diffuse = dot(N.norm(), L);
+    if (diffuse < 0) diffuse = 0;
+
+    float ambient = 0.2f;
+    float intensity = ambient + (1.0f - ambient) * diffuse;
+    Color tri_color(
+      (Uint8)(mesh.color.r * intensity * (sun.color.r / 255.0f)),
+      (Uint8)(mesh.color.g * intensity * (sun.color.g / 255.0f)),
+      (Uint8)(mesh.color.b * intensity * (sun.color.b / 255.0f))
+    );
+
+    Triangle tri(v1, v2, v3, tri_color);
     draw_face(tri, mvp, z);
   }
 }

@@ -36,6 +36,15 @@ class Camera {
     void update_position(Vec4 dir, float speed);
 };
 
+class DirectionalLight {
+  public:
+    Vec4 direction;
+    Color color;
+    float intensity;
+
+    DirectionalLight(Vec4 dir = Vec4(0,1,0), Color col = Color(255,255,255), float i = 1.0f) : direction(dir), color(col), intensity(i) { direction.w = 0; };
+};
+
 class Triangle {
   public:
     Vec4 v1, v2, v3;

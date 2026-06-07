@@ -33,7 +33,7 @@ public:
   void present();
   SDL_Window* get_window() const { return m_window; };
   void draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z);
-  void draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E);
+  void draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E, DirectionalLight sun);
 
 private:
   int W, H;

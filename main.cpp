@@ -16,6 +16,8 @@ int main() {
   camera.gen_projection_matrix();
   camera.gen_view_matrix();
 
+  DirectionalLight sun(Vec4(1, -1, 1), Color(238,231,202), 0.8f);
+
   Mesh mesh;
   if (mesh.load_from_obj("models/Untitled.obj")) std::cout << "OBJ imported\n";
   mesh.color = Color(200, 200, 200);
@@ -48,9 +50,9 @@ int main() {
     camera.gen_view_matrix();
     comp_matrix = camera.projection_matrix * camera.view_matrix;
 
-    mesh.rotation.y += M_PI/180;
+    //mesh.rotation.y += M_PI/180;
 
-    sdl.draw_mesh(mesh, comp_matrix, {camera.zn, camera.zf}, camera.position);
+    sdl.draw_mesh(mesh, comp_matrix, {camera.zn, camera.zf}, camera.position, sun);
 
     sdl.present();
   }
