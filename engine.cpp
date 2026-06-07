@@ -1,5 +1,5 @@
 #include "engine.hpp"
-#include "matrix.hpp"
+#include <string>
 
 float radians(float deg) { return deg * M_PI / 180.f; };
 
@@ -75,4 +75,42 @@ Mat Mesh::gen_model_matrix() {
   Mat R = Mat({cos(Ry),0,sin(Ry),0, 0,1,0,0, -sin(Ry),0,cos(Ry),0, 0,0,0,1}) * Mat({1,0,0,0, 0,cos(Rx),-sin(Rx),0, 0,sin(Rx),cos(Rx),0, 0,0,0,1}) * Mat({cos(Rz),-sin(Rz),0,0, sin(Rz),cos(Rz),0,0, 0,0,1,0, 0,0,0,1});
   Mat S({Sx,0,0,0, 0,Sy,0,0, 0,0,Sz,0, 0,0,0,1});
   return T*R*S;
+}
+
+bool Mesh::load_from_obj(std::string path) {
+  std::ifstream file(path);
+  if (!file.is_open()) {
+    std::cerr << "Unable to open file: " << path << std::endl;
+    return false;
+  }
+
+  std::string line;
+
+  while (std::getline(file, line)) {
+    if (line.empty() || line[0] == '#') continue;
+    std::stringstream ss(line);
+    std::string type;
+    ss >> type;
+
+    if (type == "v") {
+      float x, y, z;
+      ss >> x >> y >> z;
+      vertices.push_back(Vec4(x, y, z, 1.0f));
+    }
+    else if (type == "f") {
+      std::vector<int> f_indexes;
+      std::string segment;
+      while (ss >> segment) {
+        f_indexes.push_back(std::stoi(segment) - 1);
+      }
+      for (size_t i = 1; i < f_indexes.size() - 1; i++) {
+        indexes.push_back(f_indexes[0]);
+        indexes.push_back(f_indexes[i]);
+        indexes.push_back(f_indexes[i+1]);
+      }
+    }
+  }
+
+  file.close();
+  return true;
 }

@@ -7,6 +7,10 @@
 #include "types.hpp"
 #include "matrix.hpp"
 #include <utility>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
 #include <math.h>
 
 class Camera {
@@ -51,6 +55,7 @@ class Mesh {
     Vec4 scale;
 
     Mat gen_model_matrix();
+    bool load_from_obj(std::string path);
 };
 
 float radians(float deg);
