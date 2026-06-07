@@ -81,16 +81,12 @@ void SDLApp::fill_triangle(Vec4 v1, Vec4 v2, Vec4 v3, Color c) {
   SDL_RenderGeometry(m_renderer, NULL, v, 3, NULL, 0);
 }
 
-void SDLApp::draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
+void SDLApp::draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z) {
   float zn = z.first;
 
   Vec4 cp1 = comp_matrix * tri.v1;
   Vec4 cp2 = comp_matrix * tri.v2;
   Vec4 cp3 = comp_matrix * tri.v3;
-
-  Vec4 N = cross((tri.v2-tri.v1), (tri.v3-tri.v1));
-  Vec4 V_cam = (E-tri.v1).norm();
-  if (dot(N, V_cam) <= 0) return;
 
   Vec4* inside[3];
   Vec4* outside[3];
@@ -124,13 +120,23 @@ void SDLApp::draw_face(Triangle tri, Mat comp_matrix, std::pair<float, float> z,
 }
 
 void SDLApp::draw_mesh(Mesh mesh, Mat comp_matrix, std::pair<float, float> z, Vec4 E) {
-  comp_matrix = mesh.gen_model_matrix() * comp_matrix;
-  
+  Mat model_matrix = mesh.gen_model_matrix();
+  Mat mvp = comp_matrix * model_matrix;
+
   for (size_t i = 0; i < mesh.indexes.size(); i+=3) {
     Vec4 v1 = mesh.vertices[mesh.indexes[i]];
     Vec4 v2 = mesh.vertices[mesh.indexes[i+1]];
     Vec4 v3 = mesh.vertices[mesh.indexes[i+2]];
+    
+    Vec4 w1 = model_matrix * v1;
+    Vec4 w2 = model_matrix * v2;
+    Vec4 w3 = model_matrix * v3;
+
+    Vec4 N = cross((w2-w1), (w3-w1));
+    Vec4 V_cam = (E-w1).norm();
+    if (dot(N, V_cam) <= 0) continue;
+
     Triangle tri(v1, v2, v3, mesh.color);
-    draw_face(tri, comp_matrix, z, E);
+    draw_face(tri, mvp, z);
   }
 }
