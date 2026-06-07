@@ -19,9 +19,16 @@ int main() {
   DirectionalLight sun(Vec4(1, -1, 1), Color(238,231,202), 0.8f);
 
   Mesh mesh;
-  if (mesh.load_from_obj("models/Untitled.obj")) std::cout << "OBJ imported\n";
-  mesh.color = Color(200, 200, 200);
-  mesh.scale = Vec4(1,1,1);
+  if (0) {
+    if (mesh.load_from_obj("models/Untitled.obj")) std::cout << "OBJ imported\n";
+    mesh.color = Color(200, 200, 200);
+    mesh.scale = Vec4(1,1,1);
+  } else {
+    if (mesh.load_from_obj("models/Ariane6.obj")) std::cout << "OBJ imported\n";
+    mesh.color = Color(200, 200, 200);
+    mesh.scale = Vec4(.01,.01,.01);
+  }
+
 
   std::cout << "Number of indexes:\t" << mesh.indexes.size() << "\n";
   std::cout << "Number of vertices:\t" << mesh.vertices.size() << "\n\n";
