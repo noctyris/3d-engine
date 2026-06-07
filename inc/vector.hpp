@@ -6,7 +6,11 @@
 
 class Vec4 {
   public:
-    float x, y, z, w;
+    union {
+      struct { float x, y, z, w; };
+      float v[4];
+    };
+
     Vec4(float x = 0, float y = 0, float z = 0, float w = 0) : x(x), y(y), z(z), w(w) {};
     Vec4 operator+(const Vec4& v) const;
     Vec4 operator-(const Vec4& v) const;
