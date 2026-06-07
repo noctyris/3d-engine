@@ -1,6 +1,6 @@
 [
   {
-    "file": "sdlapp.cpp",
+    "file": "main.cpp",
     "arguments": [
       "/usr/bin/g++",
       "-std=c++17",
@@ -8,12 +8,14 @@
       "-Wextra",
       "-ggdb3",
       "-Iinc",
+      "-MMD",
+      "-MP",
       "-c",
-      "sdlapp.cpp",
+      "main.cpp",
       "-o",
-      "build/sdlapp.o"
+      "build/main.o"
     ],
     "directory": "/home/noctyris/Documents/Dev/3dEngine",
-    "output": "build/sdlapp.o"
+    "output": "build/main.o"
   }
 ]
