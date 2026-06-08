@@ -1,6 +1,5 @@
 #include "camera.hpp"
 #include "mesh.hpp"
-#include "quaternions.hpp"
 #include "sdlapp.hpp"
 #include "vector.hpp"
 
@@ -39,6 +38,7 @@ int main() {
 
     sdl.clear(Color(0, 0, 0));
     
+    mesh.transform.rotate(Vec4(0,1,0), M_PI/180);
     mesh.show(&sdl, camera);
 
     sdl.present();
