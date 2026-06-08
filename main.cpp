@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "quaternions.hpp"
 #include "sdlapp.hpp"
 #include "vector.hpp"
 
@@ -10,15 +11,8 @@ int main() {
   SDLApp sdl("3D Engine C++", SCREEN_WIDTH, SCREEN_HEIGHT);
   SDL_SetWindowRelativeMouseMode(sdl.get_window(), true);
 
-  Camera camera(Vec4(6, 2, 3, 1),
-                Vec4(0, 0, 0, 1),
-                70.0f*M_PI/180,
-                { 0.01f, 1000.0f },
-                DIMS
-  );
+  Camera camera( Vec4(6, 2, 3, 1), Vec4(0, 0, 0, 1), 70.0f*M_PI/180, { 0.01f, 1000.0f }, DIMS );
   camera.gen_projection_matrix();
-
-  return 0;
 
   float speed = 0.05f;
   Vec2f mouse;
@@ -29,7 +23,7 @@ int main() {
     const bool* state = SDL_GetKeyboardState(&numkeys);
     SDL_GetRelativeMouseState(&mouse.x, &mouse.y);
 
-    //if (mouse.x != 0 || mouse.y!=0) camera.rotate(mouse.x, mouse.y);
+    if (mouse.x != 0 || mouse.y!=0) camera.rotate(mouse.x, mouse.y);
     if (state[SDL_SCANCODE_W]) camera.move_forward(speed);
     if (state[SDL_SCANCODE_S]) camera.move_forward(-speed);
     if (state[SDL_SCANCODE_A]) camera.move_sideways(-speed);
