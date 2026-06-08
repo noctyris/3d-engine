@@ -1,8 +1,12 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include "types.hpp"
 #include <iostream>
 #include <cmath>
+
+class Mat4;
+class Camera;
 
 class Vec4 {
   public:
@@ -18,6 +22,7 @@ class Vec4 {
     Vec4 operator/(float k) const;
     float length() const;
     Vec4 norm() const;
+    Vec2 project(Mat4 mvp, const Camera& camera) const;
     void print();
 };
 

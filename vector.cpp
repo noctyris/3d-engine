@@ -1,4 +1,6 @@
 #include "vector.hpp"
+#include "camera.hpp"
+#include "matrix.hpp"
 #include <cmath>
 
 Vec4 Vec4::operator+(const Vec4& v) const {
@@ -38,6 +40,14 @@ Vec4 Vec4::norm() const {
   Vec4 vec = (*this)/length();
   vec.w = w;
   return vec;
+}
+
+Vec2 Vec4::project(Mat4 mvp, const Camera& camera) const {
+  Vec4 V_screen = mvp * (*this);
+  float x = V_screen.x;
+  float y = V_screen.y;
+  float w = V_screen.w;
+  return Vec2((x/w + 1)/2 * camera.width, (1 - y/w)/2 * camera.height, w);
 }
 
 void Vec4::print() {
