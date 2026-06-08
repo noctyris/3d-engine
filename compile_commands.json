@@ -17,5 +17,43 @@
     ],
     "directory": "/home/noctyris/Documents/Dev/3dEngine",
     "output": "build/main.o"
+  },
+  {
+    "file": "mesh.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-ggdb3",
+      "-Iinc",
+      "-MMD",
+      "-MP",
+      "-c",
+      "mesh.cpp",
+      "-o",
+      "build/mesh.o"
+    ],
+    "directory": "/home/noctyris/Documents/Dev/3dEngine",
+    "output": "build/mesh.o"
+  },
+  {
+    "file": "transform.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-ggdb3",
+      "-Iinc",
+      "-MMD",
+      "-MP",
+      "-c",
+      "transform.cpp",
+      "-o",
+      "build/transform.o"
+    ],
+    "directory": "/home/noctyris/Documents/Dev/3dEngine",
+    "output": "build/transform.o"
   }
 ]
