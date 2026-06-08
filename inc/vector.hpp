@@ -16,11 +16,12 @@ class Vec4 {
     Vec4 operator-(const Vec4& v) const;
     Vec4 operator*(float k) const;
     Vec4 operator/(float k) const;
-    float dot(const Vec4& v) const;
-    Vec4 cross(const Vec4& v) const;
     float length() const;
     Vec4 norm() const;
     void print();
 };
+
+float dot(const Vec4& v1, const Vec4& v2);
+Vec4 cross(const Vec4& v1, const Vec4& v2);
 
 #endif
