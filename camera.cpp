@@ -12,11 +12,11 @@ void Camera::gen_projection_matrix() {
 
 void Camera::gen_view_matrix() {
   Vec4 f = (target - position).norm();
-  Vec4 r = Vec4(0, 1, 0, 1).cross(f).norm();
-  Vec4 u = f.cross(r);
-  view_matrix = Mat4({r.x,  r.y,  r.z,  -r.dot(position),
-                     u.x,  u.y,  u.z,  -u.dot(position),
-                     f.x,  f.y,  f.z,  -f.dot(position),
+  Vec4 r = cross(Vec4(0, 1, 0, 1),f).norm();
+  Vec4 u = cross(f,r);
+  view_matrix = Mat4({r.x,  r.y,  r.z, -dot(r,position),
+                     u.x,  u.y,  u.z,  -dot(u,position),
+                     f.x,  f.y,  f.z,  -dot(f,position),
                      0,    0,    0,    1}
   );
 }
@@ -36,7 +36,7 @@ void Camera::move_forward(float speed) {
 }
 
 void Camera::move_sideways(float speed) {
-  Vec4 dir = Vec4(0,1,0,0).cross(get_direction()).norm();
+  Vec4 dir = cross(Vec4(0,1,0,0),get_direction()).norm();
   update_position(dir, speed);
 }
 
