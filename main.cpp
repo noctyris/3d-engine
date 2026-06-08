@@ -38,7 +38,7 @@ int main() {
 
     sdl.clear(Color(0, 0, 0));
     
-    mesh.transform.rotate(Vec4(0,1,0), M_PI/180);
+    mesh.transform.rotate(Vec4(0,1,1/M_PI), M_PI/180);
     mesh.show(&sdl, camera);
 
     sdl.present();
