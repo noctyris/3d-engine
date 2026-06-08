@@ -2,6 +2,8 @@
 #include "camera.hpp"
 #include "sdlapp.hpp"
 #include "vector.hpp"
+#include <fstream>
+#include <sstream>
 
 bool Mesh::load_from_obj(std::string path) {
   std::ifstream file(path);
@@ -61,8 +63,7 @@ void Mesh::get_info() const {
 void Mesh::show(SDLApp* sdl, const Camera& camera) const {
   auto intersect = [&](Vec4 inside, Vec4 outside, float zn) { return inside + (outside-inside) * ((zn - inside.w) / (outside.w - inside.w)); };
 
-  Mat4 V = camera.view_matrix, P = camera.projection_matrix;
-  Mat4 M({1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1});
+  Mat4 V = camera.view_matrix, P = camera.projection_matrix, M = transform.get_matrix();
   Mat4 mvp = P * V * M;
   float zn = camera.zn;
 
