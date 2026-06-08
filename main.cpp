@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "mesh.hpp"
 #include "quaternions.hpp"
 #include "sdlapp.hpp"
 #include "vector.hpp"
@@ -13,6 +14,10 @@ int main() {
 
   Camera camera( Vec4(6, 2, 3, 1), Vec4(0, 0, 0, 1), 70.0f*M_PI/180, { 0.01f, 1000.0f }, DIMS );
   camera.gen_projection_matrix();
+
+  Mesh mesh;
+  mesh.load_from_obj("models/Untitled.obj");
+  mesh.get_info();
 
   float speed = 0.05f;
   Vec2f mouse;
@@ -30,10 +35,11 @@ int main() {
     if (state[SDL_SCANCODE_D]) camera.move_sideways(speed);
     if (state[SDL_SCANCODE_R]) camera.move_altitude(speed);
     if (state[SDL_SCANCODE_F]) camera.move_altitude(-speed);
+    camera.gen_view_matrix();
 
     sdl.clear(Color(0, 0, 0));
     
-
+    mesh.show(&sdl, camera);
 
     sdl.present();
   }
