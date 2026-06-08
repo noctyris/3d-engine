@@ -60,7 +60,7 @@ void Mesh::get_info() const {
   std::cout << "\nZ-axis:\nx=" << min_z << " [--- < Δx=" << max_z-min_z << " > ---] x=" << max_z << "\n";
 }
 
-void Mesh::show(SDLApp* sdl, const Camera& camera) const {
+void Mesh::show(SDLApp* sdl, const Camera& camera, const std::vector<Light*>& lights) const {
   auto intersect = [&](Vec4 inside, Vec4 outside, float zn) { return inside + (outside-inside) * ((zn - inside.w) / (outside.w - inside.w)); };
 
   Mat4 V = camera.view_matrix, P = camera.projection_matrix, M = transform.get_matrix();
@@ -77,6 +77,34 @@ void Mesh::show(SDLApp* sdl, const Camera& camera) const {
     Vec4 N = cross((w2-w1), (w3-w1)), V_cam = (camera.position - w1).norm();
     if (dot(N, V_cam) <= 0) continue;
 
+    float r_acc = 0, g_acc = 0, b_acc = 0;
+    Vec4 N_norm = N.norm();
+
+    for (Light* light : lights) {
+      if (light->type == LightType::AMBIENT) {
+        r_acc += (light->color.r / 255.0f) * light->intensity;
+        g_acc += (light->color.g / 255.0f) * light->intensity;
+        b_acc += (light->color.b / 255.0f) * light->intensity;
+      } 
+      else if (light->type == LightType::DIRECTIONAL) {
+        DirectionalLight* d = (DirectionalLight*)light;
+        Vec4 L = (d->direction * -1.0f).norm();
+        float diffuse = dot(N_norm, L);
+        if (diffuse > 0) {
+          r_acc += (d->color.r / 255.0f) * diffuse * d->intensity;
+          g_acc += (d->color.g / 255.0f) * diffuse * d->intensity;
+          b_acc += (d->color.b / 255.0f) * diffuse * d->intensity;
+        }
+      }
+      // TODO: Add PointLight here
+    }
+
+    Color final_color(
+      (Uint8)std::min(255.0f, color.r * r_acc),
+      (Uint8)std::min(255.0f, color.g * g_acc),
+      (Uint8)std::min(255.0f, color.b * b_acc)
+    );
+
     Vec4 cp1 = mvp * v1, cp2 = mvp * v2, cp3 = mvp * v3;
     Vec4* inside[3]; Vec4* outside[3];
     int n_inside = 0, n_outside = 0;
@@ -87,22 +115,22 @@ void Mesh::show(SDLApp* sdl, const Camera& camera) const {
 
     switch (n_inside) {
       case 3: {
-        sdl->fill_triangle(to_pixels(*inside[0]), to_pixels(*inside[1]), to_pixels(*inside[2]), color);
+        sdl->fill_triangle(to_pixels(*inside[0]), to_pixels(*inside[1]), to_pixels(*inside[2]), final_color);
         break;
       }
       case 2: {
         Vec4 v1 = *inside[0], v2 = *inside[1];
         Vec4 v3 = intersect(v1, *outside[0], zn);
         Vec4 v4 = intersect(v2, *outside[0], zn);
-        sdl->fill_triangle(project(v1), project(v2), project(v3), color);
-        sdl->fill_triangle(project(v2), project(v3), project(v4), color);
+        sdl->fill_triangle(project(v1), project(v2), project(v3), final_color);
+        sdl->fill_triangle(project(v2), project(v3), project(v4), final_color);
         break;
       }
       case 1: {
         Vec4 v1 = *inside[0];
         Vec4 v2 = intersect(v1, *outside[0], zn);
         Vec4 v3 = intersect(v1, *outside[1], zn);
-        sdl->fill_triangle(project(v1), project(v2), project(v3), color);
+        sdl->fill_triangle(project(v1), project(v2), project(v3), final_color);
         break;
       }
     };

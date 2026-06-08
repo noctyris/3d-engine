@@ -1,7 +1,7 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include "quaternions.hpp"
+#include "light.hpp"
 #include "transform.hpp"
 #include "vector.hpp"
 #include "types.hpp"
@@ -22,7 +22,7 @@ class Mesh {
     Mesh() : color(Color(200, 200, 200)) {}
     bool load_from_obj(std::string path);
     void get_info() const;
-    void show(SDLApp* sdl, const Camera& camera) const;
+    void show(SDLApp* sdl, const Camera& camera, const std::vector<Light*>& lights) const;
 };
 
 #endif
